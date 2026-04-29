@@ -51,7 +51,7 @@ const InputPanel = ({ onRun }) => {
   };
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+    <div className="bg-gray-900 border border-gray-800 border-l-2 border-l-indigo-500 rounded-2xl p-6">
       <div className="flex justify-between items-center mb-5">
         <h2 className="text-sm font-medium text-gray-400 uppercase tracking-widest">Configuration</h2>
         {error && <span className="text-red-400 text-xs font-medium bg-red-900/20 px-3 py-1 rounded-full border border-red-900/50">{error}</span>}
@@ -82,7 +82,7 @@ const InputPanel = ({ onRun }) => {
         </div>
 
         {/* Request Queue */}
-        <div className="flex flex-col gap-1.5 lg:col-span-2">
+        <div className="flex flex-col gap-1.5">
           <label className="text-xs text-gray-400 font-medium">Request Queue (space separated)</label>
           <input
             type="text"
@@ -94,7 +94,7 @@ const InputPanel = ({ onRun }) => {
         </div>
 
         {/* Direction */}
-        <div className="flex flex-col gap-1.5 lg:col-start-4">
+        <div className="flex flex-col gap-1.5">
           <label className="text-xs text-gray-400 font-medium">Direction</label>
           <select 
             value={direction}
@@ -108,12 +108,14 @@ const InputPanel = ({ onRun }) => {
 
       </div>
 
-      <button 
-        onClick={handleRun}
-        className="mt-6 bg-indigo-600 hover:bg-indigo-500 active:scale-95 transition text-white text-sm font-medium px-6 py-2.5 rounded-lg shadow-lg shadow-indigo-900/20"
-      >
-        Run All Algorithms
-      </button>
+      <div className="mt-6 flex justify-end">
+        <button 
+          onClick={handleRun}
+          className="bg-indigo-600 hover:bg-indigo-500 active:scale-95 transition text-white text-sm font-medium px-8 py-2.5 rounded-xl shadow-lg shadow-indigo-900/20"
+        >
+          Run All Algorithms
+        </button>
+      </div>
     </div>
   );
 };

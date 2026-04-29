@@ -1,5 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, CartesianGrid } from 'recharts';
+import DiskAnimation from './DiskAnimation';
 
 const algoColors = {
   "FCFS": "#818cf8",
@@ -17,12 +18,32 @@ const SeekChart = ({ sequence = [], diskSize = 200, algoName = "FCFS" }) => {
 
   const strokeColor = algoColors[algoName] || "#818cf8";
 
+  // State for step-by-step needle animation
+  const [stepIndex, setStepIndex] = useState(0);
+
+  useEffect(() => {
+    setStepIndex(0);
+    const interval = setInterval(() => {
+      setStepIndex(prev => {
+        if (prev >= sequence.length - 1) { clearInterval(interval); return prev; }
+        return prev + 1;
+      });
+    }, 600); // 600ms per step
+    return () => clearInterval(interval);
+  }, [sequence]);
+
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-xl">
+    <div key={algoName} className="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-xl animate-fadeIn">
       <h2 className="text-sm font-medium text-gray-400 uppercase tracking-widest mb-1">Seek Path</h2>
       <p className="text-xs text-gray-500 mb-6">Head position vs. service order</p>
       
-      <div className="h-[400px] w-full bg-gray-950/50 rounded-xl p-4 border border-gray-800/60">
+      <DiskAnimation 
+        currentTrack={sequence[stepIndex]} 
+        diskSize={diskSize} 
+        isRunning={true} 
+      />
+
+      <div className="h-[400px] w-full bg-gray-950/50 rounded-xl p-4 border border-gray-800/60 mt-4">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={chartData} style={{ background: "transparent" }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" vertical={false} />
@@ -54,7 +75,9 @@ const SeekChart = ({ sequence = [], diskSize = 200, algoName = "FCFS" }) => {
               dot={{ fill: strokeColor, strokeWidth: 2, r: 4, stroke: "#111827" }} 
               activeDot={{ r: 6, strokeWidth: 0 }}
               name={`${algoName} Path`} 
-              animationDuration={1500}
+              isAnimationActive={true}
+              animationDuration={800}
+              animationEasing="ease-out"
             />
           </LineChart>
         </ResponsiveContainer>
