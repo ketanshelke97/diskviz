@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-// Converts a track number to a rotation angle for the needle
-// Track 0 = -90deg (left), Track 199 = 90deg (right)
+// Track 0 starts at TOP of circle (−90 degrees in CSS)
+// Full 360 degrees is divided equally by diskSize
+// So each track = 360/diskSize degrees apart
+
 function trackToAngle(track, diskSize) {
-  return ((track / (diskSize - 1)) * 180) - 90;
+  return (track / diskSize) * 360;
 }
 
 export default function DiskAnimation({ currentTrack, diskSize, isRunning }) {
@@ -78,6 +80,53 @@ export default function DiskAnimation({ currentTrack, diskSize, isRunning }) {
           />
         </div>
 
+        {/* Dynamic track labels around the circle based on diskSize */}
+        {[0, 0.25, 0.5, 0.75].map((fraction) => {
+          const track = Math.round(fraction * diskSize);
+          const angleDeg = trackToAngle(track, diskSize);
+          const angleRad = ((angleDeg - 90) * Math.PI) / 180;
+          const radius = 54; // how far from center (in %)
+          const x = 50 + radius * Math.cos(angleRad);
+          const y = 50 + radius * Math.sin(angleRad);
+
+          return (
+            <div
+              key={fraction}
+              className="absolute text-xs text-gray-500 font-medium pointer-events-none"
+              style={{
+                left: `${x}%`,
+                top: `${y}%`,
+                transform: "translate(-50%, -50%)",
+              }}
+            >
+              {track}
+            </div>
+          );
+        })}
+
+        {[0, 0.25, 0.5, 0.75].map((fraction) => {
+          const track = Math.round(fraction * diskSize);
+          const angleDeg = trackToAngle(track, diskSize);
+          return (
+            <div
+              key={fraction}
+              className="absolute inset-0"
+              style={{ transform: `rotate(${angleDeg + 90}deg)` }}
+            >
+              {/* Tick line at the top of the rotated div = at that clock position */}
+              <div
+                className="absolute bg-gray-500"
+                style={{
+                  width: "1px",
+                  height: "8px",
+                  top: "4px",
+                  left: "calc(50% - 0.5px)",
+                }}
+              />
+            </div>
+          );
+        })}
+
         {/* Needle arm — rotates to track position, does NOT spin with platter */}
         <div
           className="absolute inset-0 flex items-center justify-center"
@@ -91,7 +140,7 @@ export default function DiskAnimation({ currentTrack, diskSize, isRunning }) {
             className="absolute bg-indigo-400"
             style={{
               width: "2px",
-              height: "44%",
+              height: "46%",
               bottom: "50%",
               left: "calc(50% - 1px)",
               transformOrigin: "bottom center",
@@ -124,15 +173,15 @@ export default function DiskAnimation({ currentTrack, diskSize, isRunning }) {
         <div className="relative h-1.5 bg-gray-800 rounded-full">
           <div
             className="absolute top-0 h-1.5 bg-indigo-500 rounded-full transition-all duration-500"
-            style={{ width: `${(currentTrack / (diskSize - 1)) * 100}%` }}
+            style={{ width: `${(currentTrack / diskSize) * 100}%` }}
           />
           <div
             className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-indigo-400 border-2 border-gray-950 transition-all duration-500"
-            style={{ left: `calc(${(currentTrack / (diskSize - 1)) * 100}% - 6px)` }}
+            style={{ left: `calc(${(currentTrack / diskSize) * 100}% - 6px)` }}
           />
         </div>
         <p className="text-center text-xs text-indigo-400 mt-1 font-medium">
-          Head at track {currentTrack}
+          Head at track {currentTrack} / {diskSize - 1}
         </p>
       </div>
     </div>
