@@ -28,7 +28,7 @@ const SeekChart = ({ sequence = [], diskSize = 200, algoName = "FCFS" }) => {
         if (prev >= sequence.length - 1) { clearInterval(interval); return prev; }
         return prev + 1;
       });
-    }, 600); // 600ms per step
+    }, 1000); // 1000ms per step
     return () => clearInterval(interval);
   }, [sequence]);
 

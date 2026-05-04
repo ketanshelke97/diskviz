@@ -127,12 +127,35 @@ export default function DiskAnimation({ currentTrack, diskSize, isRunning }) {
           );
         })}
 
+        {/* Track number label — positioned outside disk using same angle as needle */}
+        {(() => {
+          const angleRad = ((angle - 90) * Math.PI) / 180;
+          const labelRadius = 62; // slightly beyond disk edge (disk is ~48% radius)
+          const x = 50 + labelRadius * Math.cos(angleRad);
+          const y = 50 + labelRadius * Math.sin(angleRad);
+          return (
+            <div
+              className="absolute text-indigo-300 text-xs font-bold pointer-events-none"
+              style={{
+                left: `${x}%`,
+                top: `${y}%`,
+                transform: "translate(-50%, -50%)",
+                whiteSpace: "nowrap",
+                transition: "left 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), top 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                textShadow: "0 0 8px rgba(129, 140, 248, 0.8)",
+              }}
+            >
+              {currentTrack}
+            </div>
+          );
+        })()}
+
         {/* Needle arm — rotates to track position, does NOT spin with platter */}
         <div
           className="absolute inset-0 flex items-center justify-center"
           style={{
             transform: `rotate(${angle}deg)`,
-            transition: "transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)", // springy feel
+            transition: "transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1)", // springy feel
           }}
         >
           {/* Arm line */}

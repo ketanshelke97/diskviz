@@ -66,7 +66,6 @@ function App() {
     <div className="min-h-screen bg-gray-950 text-white font-sans">
       <header className="border-b-2 border-gray-800 border-b-indigo-500/30 bg-gray-900/50 px-8 py-6">
         <h1 className="text-2xl font-bold tracking-tight text-indigo-400">Disk Scheduling Visualizer</h1>
-        <p className="text-sm text-gray-400 mt-1">OS Mini Project — Seek Time Analyzer</p>
       </header>
       
       <main className="max-w-6xl mx-auto px-6 py-8 space-y-8">
@@ -126,7 +125,7 @@ function App() {
       </main>
 
       <footer className="border-t border-gray-800 py-6 text-center text-gray-500 text-xs">
-        Mini Project 4 | Operating Systems Lab | 2025–26
+        Operating Systems Lab | Ketan Shelke · Nicole Pereira · Sharon Louis | 2025–26
       </footer>
     </div>
   );
